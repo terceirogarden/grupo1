@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estoque - Sorveteria</title>
+  <style>
+    body {
+      font-family: 'Times New Roman';
+      background: #ffe6e3;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: none;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #000000;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    form input, form select, form button {
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid black; 
+        border-radius: 4px;         
+        background: #F8F8FF;        
+        outline: none;              
+        transition: border-color 0.3s ease;
+    }
+    form input:focus, form select:focus {
+    border-color: #6d59b6;   
+    box-shadow: 0 0 5px #6d59b6;
+    }
+    button {
+      background-color: #F8F8FF;
+      color: #000000;
+      grid-column: span 2;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #f9c8be;
+    }
+
+    .estoque-container {
+      background: #f9c8be;
+      padding: 20px;
+      border-radius: 0;
+    }
+
+    .categoria {
+      margin-bottom: 25px;
+      background: #F8F8FF;
+      border-radius: 0;
+      padding: 10px 15px;
+    }
+
+    .categoria h3 {
+      margin-top: 0;
+      color: #000000;
+    }
+
+    ul {
+      list-style: disc inside;
+      padding-left: 20px;
+      margin: 10px 0 0 0;
+    }
+
+    li {
+      margin: 5px 0;
+      background: #f9c8be;
+      padding: 8px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #444;
+    }
+
+    .alerta {
+      background: #ffe4e4;
+      border: 1px solid #ff6a6a;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      color: #b30000;
+      font-weight: bold;
+    }
+    .rodape {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f9c8be;
+  color: #000000;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 0.9rem;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Controle de Estoque - Fica frio, mano</h1>
+
+    <form id="formulario">
+      <input type="text" id="nome" placeholder="Nome do produto" required aria-label="Nome do produto">
+      <input type="text" id="marca" placeholder="Marca do produto" required aria-label="Marca do produto">
+      
+      <select id="categoria" required aria-label="Categoria">
+        <option value="">Selecione a categoria</option>
+        <option value="Sorvetes">Sorvetes</option>
+        <option value="Caldas">Caldas</option>
+        <option value="Confetes">Confetes</option>
+        <option value="Embalagens Plásticas">Embalagens Plásticas</option>
+        <option value="Casquinhas">Casquinhas</option>
+      </select>
+
+      <input type="number" id="quantidade" placeholder="Quantidade" required min="1" aria-label="Quantidade">
+
+      <select id="tipo" aria-label="Tipo de movimentação">
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+      </select>
+
+      <button type="submit">Registrar</button>
+    </form>
+
+    <div class="estoque-container">
+      <h2>📦 Produtos em Estoque</h2>
+      <div id="estoque"></div>
+      <div id="alertas"></div>
+    </div>
+  </div>
+
+  <script>
+    const formulario = document.getElementById('formulario');
+    const estoqueContainer = document.getElementById('estoque');
+    const alertasDiv = document.getElementById('alertas');
+    let produtos = [];
+
+    formulario.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value.trim();
+      const marca = document.getElementById('marca').value.trim();
+      const categoria = document.getElementById('categoria').value;
+      const quantidade = parseInt(document.getElementById('quantidade').value);
+      const tipo = document.getElementById('tipo').value;
+
+      if (!nome || !marca || !categoria || quantidade <= 0 || isNaN(quantidade)) return;
+
+      const chave = nome.toLowerCase() + '-' + categoria.toLowerCase();
+      let existente = produtos.find(p => p.chave === chave);
+
+      if (!existente) {
+        existente = {
+          chave,
+          nome,
+          marca,
+          categoria,
+          quantidade: 0
+        };
+        produtos.push(existente);
+      }
+
+      if (tipo === 'entrada') {
+        existente.quantidade += quantidade;
+      } else {
+        existente.quantidade = Math.max(0, existente.quantidade - quantidade);
+      }
+
+      atualizarEstoque();
+      verificarEstoqueZerado();
+      formulario.reset();
+    });
+
+    function atualizarEstoque() {
+      estoqueContainer.innerHTML = '';
+
+      const categorias = [...new Set(produtos.map(p => p.categoria))].sort();
+
+      categorias.forEach(categoria => {
+        const divCategoria = document.createElement('div');
+        divCategoria.className = 'categoria';
+
+        const titulo = document.createElement('h3');
+        titulo.textContent = categoria;
+        divCategoria.appendChild(titulo);
+
+        const ul = document.createElement('ul');
+
+        const itens = produtos
+          .filter(p => p.categoria === categoria)
+          .sort((a, b) => a.nome.localeCompare(b.nome));
+
+        itens.forEach(produto => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <span><strong>${produto.nome}</strong> (${produto.marca})</span>
+            <span>${produto.quantidade} und</span>
+          `;
+          ul.appendChild(li);
+        });
+
+        divCategoria.appendChild(ul);
+        estoqueContainer.appendChild(divCategoria);
+      });
+    }
+
+    function verificarEstoqueZerado() {
+      alertasDiv.innerHTML = '';
+
+      const esgotados = produtos.filter(p => p.quantidade === 0);
+
+      esgotados.forEach(produto => {
+        const alerta = document.createElement('div');
+        alerta.className = 'alerta';
+        alerta.textContent = `⚠️ O produto "${produto.nome}" da categoria "${produto.categoria}" está esgotado e precisa ser recolocado no estoque!`;
+        alertasDiv.appendChild(alerta);
+      });
+    }
+  </script>
+</body>
+<footer class="rodape">
+  <p>🍨 Sorveteria Fica Frio, Mano - Todos os direitos reservados © 2025</p>
+</footer>
+</html>

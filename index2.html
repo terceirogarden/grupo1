@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centralizar Botão</title>
+    <style>
+        
+        body {
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4; 
+            text-align: center;
+            color: blue; 
+        }
+
+        
+        h1 {
+            font-size: 2.5rem; 
+            margin-bottom: 20px; 
+        }
+
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Você deseja continuar?</h1>
+        <div class="buttons">
+            <button onclick="window.location.href='index3.html';">Sim</button>
+            <button onclick="window.location.href='index.html';">Não</button>
+        </div>
+    </div>
+</body>
+</html>
