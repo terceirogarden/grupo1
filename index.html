@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorveteria Fica Frio, Mano</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/mJcRyGP/ice-cream-cartoon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Georgia&display=swap');
+        
+        /* Estilos gerais do site */
+        body {
+            margin: 0;
+            font-family: 'Georgia', serif;
+            background: #fde2e2;
+            color: #3a2e2e;
+            text-align: center;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: #fff5f5;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        header h1 {
+            color: #e74c3c;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        header img.logo-icon {
+            width: 30px;
+            height: auto;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3a2e2e;
+            font-weight: bold;
+            transition: color 0.3s;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: #e74c3c;
+        }
+        
+        /* Seção Principal (Hero) */
+        .hero {
+            padding: 50px 20px;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #3a2e2e;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        /* Seções de Conteúdo (escondidas por padrão) */
+        .content-section {
+            display: none;
+            padding: 40px 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #c0392b;
+        }
+
+        /* Estilos do Cardápio */
+        .cardapio-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .item {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 250px;
+            vertical-align: top;
+        }
+        
+        .item img {
+            width: 120px;
+            height: auto;
+        }
+
+        .item h3 {
+            margin: 10px 0;
+            color: #e74c3c;
+        }
+        
+        .item select {
+            margin-top: 8px;
+            padding: 5px;
+            width: 100%;
+        }
+
+        .item-quantidade {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .item-quantidade input {
+            width: 60px;
+            text-align: center;
+        }
+        
+        /* Estilos do Carrinho */
+        .carrinho-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #carrinho-lista {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+        }
+        
+        #carrinho-lista li {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #carrinho-lista li button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        #carrinho-lista li button:hover {
+            background: #c0392b;
+        }
+        
+        #total {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .cart-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .cart-actions .btn {
+            margin-top: 0;
+        }
+
+        /* Estilos do Formulário de Contato */
+        .contato-form {
+            max-width: 500px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        
+        .contato-form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .contato-form input, .contato-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        
+        .contato-form textarea {
+            resize: vertical;
+        }
+        
+        /* Banner Interativo */
+        .banner-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 250px;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        
+        .banner-wrapper {
+            display: flex;
+            width: 400%; /* 100% * 4 slides */
+            height: 100%;
+            transition: transform 0.6s ease;
+        }
+
+        .banner-slide {
+            width: 25%; /* Corrigido: cada slide deve ocupar 25% do wrapper */
+            height: 100%;
+            flex-shrink: 0; /* Impede que os slides encolham */
+        }
+        
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .banner-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 24px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .banner-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .banner-arrow.prev {
+            left: 10px;
+        }
+
+        .banner-arrow.next {
+            right: 10px;
+        }
+
+        .banner-dots {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .dot {
+            display: inline-block;
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dot.active {
+            background-color: #e74c3c;
+        }
+
+        footer {
+            padding: 20px;
+            font-size: 14px;
+            color: #3a2e2e;
+        }
+
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 36px;
+            }
+            header {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img class="logo-icon" src="https://i.ibb.co/mJcRyGP/ice-cream-cartoon.png" alt="Logo">
+            <h1>SORVETERIA</h1>
+        </div>
+        <nav>
+            <a onclick="mostrarSecao('inicio')">INÍCIO</a>
+            <a onclick="mostrarSecao('cardapio')">CARDÁPIO</a>
+            <a onclick="mostrarSecao('promocoes')">PROMOÇÕES</a>
+            <a onclick="mostrarSecao('contato')">CONTATO</a>
+            <a onclick="mostrarSecao('pedido')">PEÇA ONLINE <span id="cart-count"></span></a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio" class="hero content-section" style="display: block;">
+            <h2>FICA FRIO, MANO</h2>
+            <p>Bem-vindo à nossa sorveteria, onde cada sabor é feito com carinho e ingredientes selecionados para te proporcionar momentos de puro prazer. Aqui, o frescor e a cremosidade se unem para transformar seu dia em uma doce experiência!</p>
+            
+            <div class="banner-container">
+                <div class="banner-wrapper">
+                    <div class="banner-slide">
+                        <img src="Gemini_Generated_Image_7l1vcc7l1vcc7l1v.png" alt="Promoção de Casquinha">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="Gemini_Generated_Image_7oetsc7oetsc7oet.png" alt="Diversos Sabores de Sorvete">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="Gemini_Generated_Image_ozgoa2ozgoa2ozgo.png" alt="Milkshake Cremoso">
+                    </div>
+                    <div class="banner-slide">
+                        <img src="Gemini_Generated_Image_sccunhsccunhsccu.png" alt="Picolé de Frutas">
+                    </div>
+                </div>
+                <button class="banner-arrow prev" onclick="mudarSlide(-1)">❮</button>
+                <button class="banner-arrow next" onclick="mudarSlide(1)">❯</button>
+                <div class="banner-dots"></div>
+            </div>
+
+            <a class="btn" onclick="mostrarSecao('cardapio')">Ver Cardápio</a>
+        </section>
+
+        <section id="cardapio" class="content-section">
+            <h2>Cardápio</h2>
+            <div class="cardapio-grid">
+                <div class="item">
+                    <img src="milk shake de chocolate.png" alt="Milkshake">
+                    <h3>Milkshake</h3>
+                    <p>Sabores: Chocolate, Morango, Baunilha</p>
+                    <select id="milkshake-select">
+                        <option value="Milkshake - 400ml - R$10">400ml - R$10,00</option>
+                        <option value="Milkshake - 500ml - R$12">500ml - R$12,00</option>
+                        <option value="Milkshake - 700ml - R$15">700ml - R$15,00</option>
+                    </select>
+                    <div class="item-quantidade">
+                        <label for="milkshake-qtd">Qtd:</label>
+                        <input type="number" id="milkshake-qtd" value="1" min="1">
+                    </div>
+                    <a class="btn" onclick="adicionarAoCarrinho('milkshake-select', 'milkshake-qtd', 10, 12, 15)">Adicionar ao Carrinho</a>
+                </div>
+
+                <div class="item">
+                    <img src="pote de sorvete.png" alt="Pote de Sorvete">
+                    <h3>Pote de Sorvete</h3>
+                    <p>Sabores: Chocolate, Morango, Baunilha, Flocos</p>
+                    <select id="pote-select">
+                        <option value="Pote de Sorvete - 400ml - R$18">400ml - R$18,00</option>
+                        <option value="Pote de Sorvete - 500ml - R$22">500ml - R$22,00</option>
+                        <option value="Pote de Sorvete - 700ml - R$28">700ml - R$28,00</option>
+                    </select>
+                    <div class="item-quantidade">
+                        <label for="pote-qtd">Qtd:</label>
+                        <input type="number" id="pote-qtd" value="1" min="1">
+                    </div>
+                    <a class="btn" onclick="adicionarAoCarrinho('pote-select', 'pote-qtd', 18, 22, 28)">Adicionar ao Carrinho</a>
+                </div>
+
+                <div class="item">
+                    <img src="casquinhas.png" alt="Casquinha / Cascão">
+                    <h3>Casquinha / Cascão</h3>
+                    <p>Sabores: Chocolate, Morango, Baunilha</p>
+                    <select id="casquinha-select">
+                        <option value="Casquinha - R$5">Casquinha - R$5,00</option>
+                        <option value="Cascão - R$8">Cascão - R$8,00</option>
+                    </select>
+                    <div class="item-quantidade">
+                        <label for="casquinha-qtd">Qtd:</label>
+                        <input type="number" id="casquinha-qtd" value="1" min="1">
+                    </div>
+                    <a class="btn" onclick="adicionarAoCarrinho('casquinha-select', 'casquinha-qtd', 5, 8)">Adicionar ao Carrinho</a>
+                </div>
+
+                <div class="item">
+                    <img src="sorvetes.png" alt="Picolé">
+                    <h3>Picolé</h3>
+                    <p>Premium: Chocolate, Morango, Limão<br>Frutas: Limão, Uva, Abacaxi</p>
+                    <select id="picole-select">
+                        <option value="Picolé Premium - R$6">Premium - R$6,00</option>
+                        <option value="Picolé de Frutas - R$5">Frutas - R$5,00</option>
+                    </select>
+                    <div class="item-quantidade">
+                        <label for="picole-qtd">Qtd:</label>
+                        <input type="number" id="picole-qtd" value="1" min="1">
+                    </div>
+                    <a class="btn" onclick="adicionarAoCarrinho('picole-select', 'picole-qtd', 6, 5)">Adicionar ao Carrinho</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="promocoes" class="content-section">
+            <h2>Promoções e Descontos</h2>
+            <p>Aproveite nossas ofertas especiais!</p>
+            <div class="cardapio-grid">
+                <div class="item">
+                    <img src="sorvetes.png" alt="Promoção">
+                    <h3>Combo Família</h3>
+                    <p>2 Milkshakes + 2 Potes por apenas <b>R$50</b></p>
+                    <a class="btn" onclick="adicionarAoCarrinhoPromocional('Combo Família', 50)">Adicionar ao Carrinho</a>
+                </div>
+                <div class="item">
+                    <img src="milk shake de morango.png" alt="Promoção">
+                    <h3>Dia do Cascão</h3>
+                    <p>Cascão por <b>R$6</b> durante toda a sexta-feira!</p>
+                    <a class="btn" onclick="adicionarAoCarrinhoPromocional('Cascão', 6)">Adicionar ao Carrinho</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato" class="content-section">
+            <h2>Fale Conosco</h2>
+            <div class="contato-form">
+                <form>
+                    <label for="nome">Seu Nome:</label>
+                    <input type="text" id="nome" name="nome" required>
+                    <label for="email">Seu Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="mensagem">Mensagem:</label>
+                    <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+                    <a class="btn" href="javascript:void(0)" onclick="enviarMensagemContato()">Enviar Mensagem</a>
+                </form>
+            </div>
+        </section>
+
+        <section id="pedido" class="content-section">
+            <h2>Seu Pedido 🛒</h2>
+            <div class="carrinho-container">
+                <ul id="carrinho-lista"></ul>
+                <p id="total">Total: R$0,00</p>
+                <div class="cart-actions">
+                    <a class="btn" onclick="finalizarPedido()">Finalizar Pedido</a>
+                    <a class="btn" style="background: #95a5a6; color: white;" onclick="mostrarSecao('cardapio')">Adicionar Mais Itens</a>
+                </div>
+            </div>
+            <p id="carrinho-vazio" style="display:none;">Seu carrinho está vazio.</p>
+        </section>
+    </main>
+
+    <footer>
+        © 2025 Fica Frio, Mano - Todos os direitos reservados
+    </footer>
+
+    <script>
+        let carrinho = [];
+
+        function mostrarSecao(secao) {
+            document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+            document.getElementById(secao).style.display = 'block';
+            if (secao === 'pedido') {
+                atualizarCarrinho();
+            }
+        }
+
+        function adicionarAoCarrinho(produtoId, quantidadeId, ...precos) {
+            let item = {};
+            let quantidade = 1;
+
+            if (document.getElementById(quantidadeId)) {
+                quantidade = parseInt(document.getElementById(quantidadeId).value, 10);
+                if (quantidade < 1) {
+                    alert("A quantidade deve ser no mínimo 1.");
+                    return;
+                }
+            }
+            if (document.getElementById(produtoId) && document.getElementById(produtoId).tagName === 'SELECT') {
+                const select = document.getElementById(produtoId);
+                const produtoNome = select.value.split(' - ')[0];
+                const detalhe = select.value.split(' - ')[1];
+                let precoString = select.value.split(' - ')[2];
+                let preco = parseFloat(precoString.replace('R$', '').replace(',', '.'));
+
+                if (isNaN(preco)) {
+                    const selectedOption = select.selectedIndex;
+                    if (precos[selectedOption] !== undefined) {
+                        preco = precos[selectedOption];
+                    } else {
+                        console.error('Preço não encontrado.');
+                        return;
+                    }
+                }
+                item = { nome: produtoNome, detalhe: detalhe, preco: preco, quantidade: quantidade };
+            } else {
+                item = { nome: produtoId, detalhe: 'Promoção', preco: precos[0], quantidade: quantidade };
+            }
+            
+            carrinho.push(item);
+            
+            alert(`${item.quantidade}x ${item.nome} adicionado(s) ao carrinho!`);
+            
+            atualizarCarrinho();
+        }
+
+        function adicionarAoCarrinhoPromocional(produtoNome, preco) {
+            // Verifica se a promoção já está no carrinho
+            const promoExistente = carrinho.find(item => item.nome === produtoNome && item.detalhe === 'Promoção');
+            if (promoExistente) {
+                alert(`Você já adicionou a promoção "${produtoNome}" ao seu carrinho. Cada cliente pode comprar esta promoção apenas uma vez.`);
+                return;
+            }
+
+            const item = { nome: produtoNome, detalhe: 'Promoção', preco: preco, quantidade: 1 };
+            carrinho.push(item);
+            alert(`A promoção "${produtoNome}" foi adicionada ao seu carrinho!`);
+            atualizarCarrinho();
+        }
+
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            atualizarCarrinho();
+        }
+
+        function atualizarCarrinho() {
+            const lista = document.getElementById('carrinho-lista');
+            const totalElemento = document.getElementById('total');
+            const carrinhoVazioMsg = document.getElementById('carrinho-vazio');
+            let total = 0;
+            
+            lista.innerHTML = '';
+            
+            if (carrinho.length === 0) {
+                carrinhoVazioMsg.style.display = 'block';
+                totalElemento.style.display = 'none';
+                document.querySelector('.cart-actions').style.display = 'none';
+            } else {
+                carrinhoVazioMsg.style.display = 'none';
+                totalElemento.style.display = 'block';
+                document.querySelector('.cart-actions').style.display = 'flex';
+
+                carrinho.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    let detalheTexto = item.detalhe ? `(${item.detalhe})` : '';
+                    const precoTotalItem = item.preco * item.quantidade;
+                    li.innerHTML = `${item.quantidade}x ${item.nome} ${detalheTexto} - <b>R$${precoTotalItem.toFixed(2).replace('.', ',')}</b> <button onclick="removerDoCarrinho(${index})">X</button>`;
+                    lista.appendChild(li);
+                    total += precoTotalItem;
+                });
+            }
+
+            totalElemento.textContent = `Total: R$${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cart-count').textContent = carrinho.length > 0 ? `(${carrinho.length})` : '';
+        }
+
+        function finalizarPedido() {
+            if (carrinho.length === 0) {
+                alert("Seu carrinho está vazio!");
+                return;
+            }
+            let mensagem = "Olá! Gostaria de fazer o seguinte pedido:\n\n";
+            let total = 0;
+            
+            carrinho.forEach(item => {
+                let detalheTexto = item.detalhe ? `(${item.detalhe})` : '';
+                const precoTotalItem = item.preco * item.quantidade;
+                mensagem += `* ${item.quantidade}x ${item.nome} ${detalheTexto} - R$${precoTotalItem.toFixed(2).replace('.', ',')}\n`;
+                total += precoTotalItem;
+            });
+            
+            mensagem += `\n*Total: R$${total.toFixed(2).replace('.', ',')}*`;
+            
+            window.open(`https://wa.me/5562991082491?text=${encodeURIComponent(mensagem)}`, '_blank');
+            
+            carrinho = [];
+            atualizarCarrinho();
+        }
+
+        function enviarMensagemContato() {
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const mensagem = document.getElementById('mensagem').value;
+
+            if (nome && email && mensagem) {
+                const whatsappMsg = `Olá, meu nome é ${nome} e meu email é ${email}. Gostaria de entrar em contato com a seguinte mensagem:\n\n${mensagem}`;
+                window.open(`https://wa.me/5562991082491?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
+            } else {
+                alert("Por favor, preencha todos os campos do formulário.");
+            }
+        }
+
+        // Lógica do Banner Interativo - CORRIGIDA
+        let slideIndex = 0;
+        let slideInterval;
+        const slides = document.querySelectorAll('.banner-slide');
+        const dotsContainer = document.querySelector('.banner-dots');
+        const wrapper = document.querySelector('.banner-wrapper');
+
+        function criarDots() {
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < slides.length; i++) {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                dot.onclick = () => irParaSlide(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function mostrarSlides() {
+            // Garante que o slideIndex está dentro dos limites
+            if (slideIndex >= slides.length) {
+                slideIndex = 0;
+            }
+            if (slideIndex < 0) {
+                slideIndex = slides.length - 1;
+            }
+            
+            // Move o wrapper para mostrar o slide correto
+            const translateX = -slideIndex * 25; // 25% para cada slide (100% / 4 slides)
+            wrapper.style.transform = `translateX(${translateX}%)`;
+
+            // Atualiza os dots
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === slideIndex);
+            });
+        }
+
+        function mudarSlide(n) {
+            // Para o auto-slide temporariamente
+            clearInterval(slideInterval);
+            
+            slideIndex += n;
+            mostrarSlides();
+            
+            // Reinicia o auto-slide após 5 segundos
+            setTimeout(() => {
+                iniciarAutoSlide();
+            }, 5000);
+        }
+
+        function irParaSlide(n) {
+            // Para o auto-slide temporariamente
+            clearInterval(slideInterval);
+            
+            slideIndex = n;
+            mostrarSlides();
+            
+            // Reinicia o auto-slide após 5 segundos
+            setTimeout(() => {
+                iniciarAutoSlide();
+            }, 5000);
+        }
+
+        function proximoSlideAuto() {
+            slideIndex++;
+            if (slideIndex >= slides.length) {
+                slideIndex = 0;
+            }
+            mostrarSlides();
+        }
+
+        function iniciarAutoSlide() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(proximoSlideAuto, 4000); // Muda a cada 4 segundos
+        }
+
+        // Pausa o auto-slide quando o mouse está sobre o banner
+        document.querySelector('.banner-container').addEventListener('mouseenter', () => {
+            clearInterval(slideInterval);
+        });
+
+        // Retoma o auto-slide quando o mouse sai do banner
+        document.querySelector('.banner-container').addEventListener('mouseleave', () => {
+            iniciarAutoSlide();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            mostrarSecao('inicio');
+            criarDots();
+            mostrarSlides();
+            iniciarAutoSlide();
+        });
+    </script>
+</body>
+</html>
