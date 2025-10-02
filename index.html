@@ -253,8 +253,9 @@
         }
 
         .banner-slide {
-            width: 100%;
+            width: 25%; /* Corrigido: cada slide deve ocupar 25% do wrapper */
             height: 100%;
+            flex-shrink: 0; /* Impede que os slides encolham */
         }
         
         .banner-slide img {
@@ -372,8 +373,8 @@
                         <img src="Gemini_Generated_Image_sccunhsccunhsccu.png" alt="Picolé de Frutas">
                     </div>
                 </div>
-                <button class="banner-arrow prev" onclick="mudarSlide(-1)">&#10094;</button>
-                <button class="banner-arrow next" onclick="mudarSlide(1)">&#10095;</button>
+                <button class="banner-arrow prev" onclick="mudarSlide(-1)">❮</button>
+                <button class="banner-arrow next" onclick="mudarSlide(1)">❯</button>
                 <div class="banner-dots"></div>
             </div>
 
@@ -384,7 +385,7 @@
             <h2>Cardápio</h2>
             <div class="cardapio-grid">
                 <div class="item">
-                    <img src="https://i.ibb.co/s617XgW/milk-shake-de-chocolate.png" alt="Milkshake">
+                    <img src="milk shake de chocolate.png" alt="Milkshake">
                     <h3>Milkshake</h3>
                     <p>Sabores: Chocolate, Morango, Baunilha</p>
                     <select id="milkshake-select">
@@ -400,7 +401,7 @@
                 </div>
 
                 <div class="item">
-                    <img src="https://i.ibb.co/xqM4jTG/baunilha.png" alt="Pote de Sorvete">
+                    <img src="pote de sorvete.png" alt="Pote de Sorvete">
                     <h3>Pote de Sorvete</h3>
                     <p>Sabores: Chocolate, Morango, Baunilha, Flocos</p>
                     <select id="pote-select">
@@ -416,7 +417,7 @@
                 </div>
 
                 <div class="item">
-                    <img src="https://i.ibb.co/hW7Jf8Q/morango.png" alt="Casquinha / Cascão">
+                    <img src="casquinhas.png" alt="Casquinha / Cascão">
                     <h3>Casquinha / Cascão</h3>
                     <p>Sabores: Chocolate, Morango, Baunilha</p>
                     <select id="casquinha-select">
@@ -431,7 +432,7 @@
                 </div>
 
                 <div class="item">
-                    <img src="https://i.ibb.co/7z2p7hH/picole.png" alt="Picolé">
+                    <img src="sorvetes.png" alt="Picolé">
                     <h3>Picolé</h3>
                     <p>Premium: Chocolate, Morango, Limão<br>Frutas: Limão, Uva, Abacaxi</p>
                     <select id="picole-select">
@@ -452,13 +453,13 @@
             <p>Aproveite nossas ofertas especiais!</p>
             <div class="cardapio-grid">
                 <div class="item">
-                    <img src="https://i.ibb.co/mJcRyGP/ice-cream-cartoon.png" alt="Promoção">
+                    <img src="sorvetes.png" alt="Promoção">
                     <h3>Combo Família</h3>
                     <p>2 Milkshakes + 2 Potes por apenas <b>R$50</b></p>
                     <a class="btn" onclick="adicionarAoCarrinhoPromocional('Combo Família', 50)">Adicionar ao Carrinho</a>
                 </div>
                 <div class="item">
-                    <img src="https://i.ibb.co/hW7Jf8Q/morango.png" alt="Promoção">
+                    <img src="milk shake de morango.png" alt="Promoção">
                     <h3>Dia do Cascão</h3>
                     <p>Cascão por <b>R$6</b> durante toda a sexta-feira!</p>
                     <a class="btn" onclick="adicionarAoCarrinhoPromocional('Cascão', 6)">Adicionar ao Carrinho</a>
@@ -496,7 +497,7 @@
     </main>
 
     <footer>
-        &copy; 2025 Fica Frio, Mano - Todos os direitos reservados
+        © 2025 Fica Frio, Mano - Todos os direitos reservados
     </footer>
 
     <script>
@@ -635,7 +636,7 @@
             }
         }
 
-        // Lógica do Banner Interativo
+        // Lógica do Banner Interativo - CORRIGIDA
         let slideIndex = 0;
         let slideInterval;
         const slides = document.querySelectorAll('.banner-slide');
@@ -653,6 +654,7 @@
         }
 
         function mostrarSlides() {
+            // Garante que o slideIndex está dentro dos limites
             if (slideIndex >= slides.length) {
                 slideIndex = 0;
             }
@@ -660,40 +662,64 @@
                 slideIndex = slides.length - 1;
             }
             
-            wrapper.style.transform = `translateX(${-slideIndex * 100}%)`;
+            // Move o wrapper para mostrar o slide correto
+            const translateX = -slideIndex * 25; // 25% para cada slide (100% / 4 slides)
+            wrapper.style.transform = `translateX(${translateX}%)`;
 
+            // Atualiza os dots
             document.querySelectorAll('.dot').forEach((dot, i) => {
-                if (i === slideIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
+                dot.classList.toggle('active', i === slideIndex);
             });
         }
 
         function mudarSlide(n) {
+            // Para o auto-slide temporariamente
+            clearInterval(slideInterval);
+            
             slideIndex += n;
             mostrarSlides();
-            reiniciarAutoSlide();
+            
+            // Reinicia o auto-slide após 5 segundos
+            setTimeout(() => {
+                iniciarAutoSlide();
+            }, 5000);
         }
 
         function irParaSlide(n) {
+            // Para o auto-slide temporariamente
+            clearInterval(slideInterval);
+            
             slideIndex = n;
             mostrarSlides();
-            reiniciarAutoSlide();
+            
+            // Reinicia o auto-slide após 5 segundos
+            setTimeout(() => {
+                iniciarAutoSlide();
+            }, 5000);
+        }
+
+        function proximoSlideAuto() {
+            slideIndex++;
+            if (slideIndex >= slides.length) {
+                slideIndex = 0;
+            }
+            mostrarSlides();
         }
 
         function iniciarAutoSlide() {
             clearInterval(slideInterval);
-            slideInterval = setInterval(() => {
-                mudarSlide(1);
-            }, 3000);
+            slideInterval = setInterval(proximoSlideAuto, 4000); // Muda a cada 4 segundos
         }
 
-        function reiniciarAutoSlide() {
+        // Pausa o auto-slide quando o mouse está sobre o banner
+        document.querySelector('.banner-container').addEventListener('mouseenter', () => {
             clearInterval(slideInterval);
+        });
+
+        // Retoma o auto-slide quando o mouse sai do banner
+        document.querySelector('.banner-container').addEventListener('mouseleave', () => {
             iniciarAutoSlide();
-        }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             mostrarSecao('inicio');
