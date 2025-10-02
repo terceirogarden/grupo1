@@ -124,7 +124,7 @@ function redirecionarParaLoja() {
     
     // Redirecionar para loja.html após 1.5 segundos
     setTimeout(() => {
-        window.location.href = 'svt.html';
+        window.location.href = 'loja.html';
     }, 1500);
 }
 
