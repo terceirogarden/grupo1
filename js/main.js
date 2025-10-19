@@ -173,16 +173,19 @@ function renderizarProdutos(lista) {
   container.innerHTML = html;
 }
 
-// Atualizar carregarProdutos para salvar produtosOriginais
+// Função consolidada para carregar e renderizar produtos
+
 function carregarProdutos() {
-    db.collection("produtos").get().then(snapshot => {
-        produtosOriginais = [];
-        snapshot.forEach(doc => {
-            produtosOriginais.push(doc.data());
-        });
-        renderizarProdutos(produtosOriginais);
-    }).catch(err => {
-        document.getElementById("produtos").innerHTML = "<p class='text-danger'>Erro ao carregar produtos.</p>";
-        console.error(err);
+  db.collection("produtos").get().then(snapshot => {
+    produtosOriginais = [];
+    snapshot.forEach(doc => {
+      const p = doc.data();
+      produtosOriginais.push(p);
     });
+    renderizarProdutos(produtosOriginais);
+  }).catch(err => {
+    document.getElementById("produtos").innerHTML = "<p class='text-danger'>Erro ao carregar produtos.</p>";
+    console.error(err);
+  });
 }
+
