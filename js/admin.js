@@ -1,4 +1,22 @@
 
+auth.onAuthStateChanged(user => {
+    if (user) {
+        db.collection("usuarios").doc(user.uid).get().then(doc => {
+            const dados = doc.data();
+            if (dados && dados.perfil === "admin") {
+                document.getElementById("adminContent").style.display = "block";
+            } else {
+                document.getElementById("acessoNegado").style.display = "block";
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 2000);
+            }
+        });
+    } else {
+        window.location.href = "index.html";
+    }
+});
+
 function adicionarProduto() {
     const nome = document.getElementById("nome").value;
     const preco = parseFloat(document.getElementById("preco").value);
