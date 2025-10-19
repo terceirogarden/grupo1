@@ -16,6 +16,12 @@ auth.onAuthStateChanged(user => {
   });
 });
 
+function alternarEntradaImagem() {
+  const tipo = document.getElementById("tipoImagem").value;
+  document.getElementById("imagemURL").classList.toggle("d-none", tipo !== "url");
+  document.getElementById("imagemArquivo").classList.toggle("d-none", tipo !== "arquivo");
+}
+
 function carregarProdutos() {
   db.collection("produtos").get().then(snapshot => {
     let html = "";
@@ -50,7 +56,10 @@ function mostrarFormulario() {
   document.getElementById("nome").value = "";
   document.getElementById("preco").value = "";
   document.getElementById("estoque").value = "";
+  document.getElementById("imagemURL").value = "";
   document.getElementById("imagemArquivo").value = "";
+  document.getElementById("tipoImagem").value = "url";
+  alternarEntradaImagem();
 }
 
 function cancelarFormulario() {
@@ -62,9 +71,19 @@ function salvarProduto() {
   const nome = document.getElementById("nome").value;
   const preco = parseFloat(document.getElementById("preco").value);
   const estoque = parseInt(document.getElementById("estoque").value);
+  const tipoImagem = document.getElementById("tipoImagem").value;
+  const imagemURL = document.getElementById("imagemURL").value;
   const imagemArquivo = document.getElementById("imagemArquivo").files[0];
 
-  if (imagemArquivo) {
+  if (!nome || isNaN(preco) || isNaN(estoque)) {
+    alert("Preencha corretamente nome, preço e estoque.");
+    return;
+  }
+
+  if (tipoImagem === "url" && imagemURL) {
+    const dados = { nome, preco, estoque, imagem: imagemURL };
+    salvarOuAtualizar(id, dados);
+  } else if (tipoImagem === "arquivo" && imagemArquivo) {
     const storageRef = storage.ref('produtos/' + imagemArquivo.name);
     storageRef.put(imagemArquivo).then(snapshot => {
       snapshot.ref.getDownloadURL().then(url => {
@@ -73,8 +92,7 @@ function salvarProduto() {
       });
     });
   } else {
-    const dados = { nome, preco, estoque };
-    salvarOuAtualizar(id, dados);
+    alert("Selecione um tipo de imagem válido e preencha o campo corretamente.");
   }
 }
 
@@ -100,7 +118,9 @@ function editarProduto(id, nome, preco, estoque, imagem) {
   document.getElementById("nome").value = nome;
   document.getElementById("preco").value = preco;
   document.getElementById("estoque").value = estoque;
-  // imagemArquivo não pode ser preenchido via JS
+  document.getElementById("imagemURL").value = imagem;
+  document.getElementById("tipoImagem").value = "url";
+  alternarEntradaImagem();
 }
 
 function excluirProduto(id) {
