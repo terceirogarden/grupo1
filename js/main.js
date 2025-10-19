@@ -26,18 +26,25 @@ function carregarProdutos() {
         let html = "";
         snapshot.forEach(doc => {
             const produto = doc.data();
+
+            const nome = produto.nome || "Sem nome";
+            const preco = typeof produto.preco === 'number' ? produto.preco.toFixed(2) : "0.00";
+            const estoque = produto.estoque ?? "N/A";
+            const imagem = produto.imagem || "https://via.placeholder.com/150";
+
             html += `
                 <div style="border:1px solid #ccc; padding:10px; margin:10px;">
-                    <img src="${produto.imagem}" width="150"><br>
-                    <strong>${produto.nome}</strong><br>
-                    R$ ${produto.preco.toFixed(2)}<br>
-                    Estoque: ${produto.estoque}
+                    <img src="${imagem}" width="150"><br>
+                    <strong>${nome}</strong><br>
+                    R$ ${preco}<br>
+                    Estoque: ${estoque}
                 </div>
             `;
         });
         document.getElementById("produtos").innerHTML = html;
     });
 }
+
 
 auth.onAuthStateChanged(user => {
     if (user) {
