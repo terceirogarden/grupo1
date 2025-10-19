@@ -15,7 +15,24 @@ function login() {
         .catch(err => alert("Erro ao logar: " + err.message));
 }
 
+
 function cadastrar() {
+  const email = document.getElementById("emailCadastro").value;
+  const senha = document.getElementById("senhaCadastro").value;
+  auth.createUserWithEmailAndPassword(email, senha).then(cred => {
+    return db.collection("usuarios").doc(cred.user.uid).set({
+      email: email,
+      perfil: "cliente"
+    });
+  }).then(() => {
+    alert("Cadastro realizado!");
+    var modal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+    modal.hide();
+  }).catch(error => {
+    alert("Erro ao cadastrar: " + error.message);
+  });
+}
+
     const email = document.getElementById("emailCadastro").value;
     const senha = document.getElementById("senhaCadastro").value;
     auth.createUserWithEmailAndPassword(email, senha)
