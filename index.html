@@ -14,7 +14,10 @@
 <body class="bg-light">
 
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
-    <div class="container">
+    
+<div class="container">
+  <div id="produtos" class="row mb-4"></div>
+
       <a class="navbar-brand" href="#">🛍️ Loja Online</a>
       <div>
         <button class="btn btn-outline-secondary me-2 d-none" id="btn-admin" onclick="window.location.href='admin.html'">Admin</button>
@@ -23,8 +26,23 @@
       </div>
     </div>
   </nav>
+<div class="form-check form-switch text-end me-3 mt-2">
+  <input class="form-check-input" type="checkbox" id="modoEscuroToggle" onchange="alternarModoEscuro()">
+  <label class="form-check-label text-light" for="modoEscuroToggle">Modo escuro</label>
+</div>
+<script>
+function alternarModoEscuro() {
+  document.body.classList.toggle('bg-dark');
+  document.body.classList.toggle('text-light');
+  document.querySelectorAll('.card').forEach(card => card.classList.toggle('bg-secondary'));
+}
+</script>
 
-  <div class="container">
+
+  
+<div class="container">
+  <div id="produtos" class="row mb-4"></div>
+
     <!-- Filtros de busca -->
     <div class="row mb-4">
       <div class="col-md-4">
@@ -71,5 +89,20 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<footer class="bg-dark text-light py-4 mt-5">
+  <div class="container text-center">
+    <p class="mb-1">© 2025 Loja Online - Todos os direitos reservados.</p>
+    <p class="mb-0"><small>Desenvolvido com ♥ usando Firebase & Bootstrap</small></p>
+  </div>
+</footer>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  carregarProdutos();
+});
+</script>
+
 </body>
 </html>

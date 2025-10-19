@@ -15,7 +15,27 @@ function login() {
         .catch(err => alert("Erro ao logar: " + err.message));
 }
 
+
 function cadastrar() {
+  const email = document.getElementById("emailCadastro").value;
+  const senha = document.getElementById("senhaCadastro").value;
+
+  auth.createUserWithEmailAndPassword(email, senha)
+    .then(cred => {
+      return db.collection("usuarios").doc(cred.user.uid).set({
+        email: email,
+        perfil: "cliente"
+      });
+    })
+    .then(() => {
+      alert("Cadastro realizado!");
+      bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+    })
+    .catch(error => {
+      alert("Erro ao cadastrar: " + error.message);
+    });
+}
+
     const email = document.getElementById("emailCadastro").value;
     const senha = document.getElementById("senhaCadastro").value;
     auth.createUserWithEmailAndPassword(email, senha)
@@ -153,16 +173,19 @@ function renderizarProdutos(lista) {
   container.innerHTML = html;
 }
 
-// Atualizar carregarProdutos para salvar produtosOriginais
+// Função consolidada para carregar e renderizar produtos
+
 function carregarProdutos() {
-    db.collection("produtos").get().then(snapshot => {
-        produtosOriginais = [];
-        snapshot.forEach(doc => {
-            produtosOriginais.push(doc.data());
-        });
-        renderizarProdutos(produtosOriginais);
-    }).catch(err => {
-        document.getElementById("produtos").innerHTML = "<p class='text-danger'>Erro ao carregar produtos.</p>";
-        console.error(err);
+  db.collection("produtos").get().then(snapshot => {
+    produtosOriginais = [];
+    snapshot.forEach(doc => {
+      const p = doc.data();
+      produtosOriginais.push(p);
     });
+    renderizarProdutos(produtosOriginais);
+  }).catch(err => {
+    document.getElementById("produtos").innerHTML = "<p class='text-danger'>Erro ao carregar produtos.</p>";
+    console.error(err);
+  });
 }
+

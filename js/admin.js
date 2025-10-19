@@ -4,12 +4,14 @@ let usuarioAtual = null;
 auth.onAuthStateChanged(user => {
   if (!user) return window.location.href = "index.html";
   usuarioAtual = user;
+
   db.collection("usuarios").doc(user.uid).get().then(doc => {
     if (!doc.exists || doc.data().perfil !== "admin") {
       alert("Acesso negado.");
       window.location.href = "index.html";
     } else {
       carregarProdutos();
+      carregarUsuarios();
     }
   });
 });
@@ -35,9 +37,10 @@ function carregarProdutos() {
       `;
     });
     document.getElementById("lista-produtos").innerHTML = html;
-    if (!snapshot.empty) {
-      mostrarMensagem("Produtos carregados com sucesso.", "info");
-    }
+    mostrarMensagem("Produtos carregados com sucesso.", "info");
+  }).catch(error => {
+    console.error("Erro ao carregar produtos:", error);
+    mostrarMensagem("Erro ao carregar produtos.", "danger");
   });
 }
 
@@ -47,7 +50,7 @@ function mostrarFormulario() {
   document.getElementById("nome").value = "";
   document.getElementById("preco").value = "";
   document.getElementById("estoque").value = "";
-  document.getElementById("imagem").value = "";
+  document.getElementById("imagemArquivo").value = "";
 }
 
 function cancelarFormulario() {
@@ -61,7 +64,6 @@ function salvarProduto() {
   const estoque = parseInt(document.getElementById("estoque").value);
   const imagemArquivo = document.getElementById("imagemArquivo").files[0];
 
-  
   if (imagemArquivo) {
     const storageRef = storage.ref('produtos/' + imagemArquivo.name);
     storageRef.put(imagemArquivo).then(snapshot => {
@@ -74,12 +76,9 @@ function salvarProduto() {
     const dados = { nome, preco, estoque };
     salvarOuAtualizar(id, dados);
   }
+}
 
-  return;  // impede execução duplicada
-
-
-  if (id) {
-    function salvarOuAtualizar(id, dados) {
+function salvarOuAtualizar(id, dados) {
   if (id) {
     db.collection("produtos").doc(id).update(dados).then(() => {
       mostrarMensagem("Produto atualizado com sucesso!", "success");
@@ -87,13 +86,12 @@ function salvarProduto() {
       carregarProdutos();
     });
   } else {
-      } else {
     db.collection("produtos").add(dados).then(() => {
       mostrarMensagem("Produto adicionado com sucesso!", "success");
       cancelarFormulario();
       carregarProdutos();
     });
-    }
+  }
 }
 
 function editarProduto(id, nome, preco, estoque, imagem) {
@@ -102,7 +100,7 @@ function editarProduto(id, nome, preco, estoque, imagem) {
   document.getElementById("nome").value = nome;
   document.getElementById("preco").value = preco;
   document.getElementById("estoque").value = estoque;
-  document.getElementById("imagem").value = imagem;
+  // imagemArquivo não pode ser preenchido via JS
 }
 
 function excluirProduto(id) {
@@ -111,7 +109,7 @@ function excluirProduto(id) {
       mostrarMensagem("Produto excluído com sucesso!", "danger");
       carregarProdutos();
     });
-    }
+  }
 }
 
 function mostrarMensagem(texto, tipo) {
@@ -122,34 +120,25 @@ function mostrarMensagem(texto, tipo) {
   setTimeout(() => el.classList.add("d-none"), 3000);
 }
 
-function forcarProdutoExemplo() {
-  db.collection("produtos").add({
-    nome: "Produto Exemplo",
-    preco: 99.9,
-    estoque: 10,
-    imagem: "https://via.placeholder.com/300"
-  }).then(() => {
-    mostrarMensagem("Produto de exemplo adicionado!", "primary");
-    carregarProdutos();
-  });
-}
-
-
+// Gerenciar usuários
 function carregarUsuarios() {
   db.collection("usuarios").get().then(snapshot => {
     let html = "";
     snapshot.forEach(doc => {
       const u = doc.data();
+      const email = u.email || "Email não disponível";
       const isAdmin = u.perfil === "admin";
       html += `
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          ${u.email}
+          ${email}
           ${isAdmin ? '<span class="badge bg-success">Admin</span>' :
           `<button class="btn btn-sm btn-outline-success" onclick="promover('${doc.id}')">Tornar Admin</button>`}
         </li>
       `;
     });
     document.getElementById("lista-usuarios").innerHTML = html;
+  }).catch(err => {
+    console.error("Erro ao carregar usuários:", err);
   });
 }
 
@@ -157,20 +146,7 @@ function promover(uid) {
   db.collection("usuarios").doc(uid).update({ perfil: "admin" }).then(() => {
     mostrarMensagem("Usuário promovido a admin.", "success");
     carregarUsuarios();
+  }).catch(err => {
+    console.error("Erro ao promover usuário:", err);
   });
 }
-
-// Chamar também ao carregar
-auth.onAuthStateChanged(user => {
-  if (!user) return window.location.href = "index.html";
-  usuarioAtual = user;
-  db.collection("usuarios").doc(user.uid).get().then(doc => {
-    if (!doc.exists || doc.data().perfil !== "admin") {
-      alert("Acesso negado.");
-      window.location.href = "index.html";
-    } else {
-      carregarProdutos();
-      carregarUsuarios(); // <-- novo
-    }
-  });
-});
