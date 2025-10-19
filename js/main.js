@@ -36,17 +36,6 @@ function cadastrar() {
     });
 }
 
-    const email = document.getElementById("emailCadastro").value;
-    const senha = document.getElementById("senhaCadastro").value;
-    auth.createUserWithEmailAndPassword(email, senha)
-        .then(() => {
-            const uid = auth.currentUser.uid;
-            db.collection("usuarios").doc(uid).set({ perfil: "cliente" });
-            alert("Usuário criado!");
-            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
-        })
-        .catch(err => alert("Erro ao cadastrar: " + err.message));
-}
 
 function logout() {
     auth.signOut();
@@ -88,26 +77,16 @@ function finalizarCompra() {
 
 function carregarProdutos() {
     db.collection("produtos").get().then(snapshot => {
-        let html = "";
+        produtosOriginais = [];
         snapshot.forEach(doc => {
             const p = doc.data();
-            html += `
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <img src="${p.imagem || 'https://via.placeholder.com/300x200'}" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title">${p.nome}</h5>
-                            <p class="card-text">Preço: R$ ${p.preco.toFixed(2)}</p>
-                            <p class="card-text">Estoque: ${p.estoque}</p>
-                            <button class="btn btn-primary w-100" onclick='adicionarAoCarrinho(${JSON.stringify(p)})'>Comprar</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+            console.log('Produto carregado:', p);
+            produtosOriginais.push(p);
         });
-        document.getElementById("produtos").innerHTML = html;
+        console.log('Renderizando', produtosOriginais.length, 'produtos...');
+        renderizarProdutos(produtosOriginais);
     }).catch(err => {
-        document.getElementById("produtos").innerHTML = "<p class='text-danger'>Erro ao carregar produtos.</p>";
+        document.getElementById("produtos").innerHTML = "<p class='text-danger'>Erro ao carregar produtos. Verifique o console para detalhes.</p>";
         console.error(err);
     });
 }
@@ -172,20 +151,3 @@ function renderizarProdutos(lista) {
   });
   container.innerHTML = html;
 }
-
-// Função consolidada para carregar e renderizar produtos
-
-function carregarProdutos() {
-  db.collection("produtos").get().then(snapshot => {
-    produtosOriginais = [];
-    snapshot.forEach(doc => {
-      const p = doc.data();
-      produtosOriginais.push(p);
-    });
-    renderizarProdutos(produtosOriginais);
-  }).catch(err => {
-    document.getElementById("produtos").innerHTML = "<p class='text-danger'>Erro ao carregar produtos.</p>";
-    console.error(err);
-  });
-}
-
