@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Loja Online - v9.3.1</title>
+  <title>Loja Online - Corrigido</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -13,11 +13,9 @@
 </head>
 <body class="bg-light">
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
-    
-<div class="container">
-  <div id="produtos" class="row mb-4"></div>
-
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container d-flex justify-content-between align-items-center">
       <a class="navbar-brand" href="#">🛍️ Loja Online</a>
       <div>
         <button class="btn btn-outline-secondary me-2 d-none" id="btn-admin" onclick="window.location.href='admin.html'">Admin</button>
@@ -26,24 +24,23 @@
       </div>
     </div>
   </nav>
-<div class="form-check form-switch text-end me-3 mt-2">
-  <input class="form-check-input" type="checkbox" id="modoEscuroToggle" onchange="alternarModoEscuro()">
-  <label class="form-check-label text-light" for="modoEscuroToggle">Modo escuro</label>
-</div>
-<script>
-function alternarModoEscuro() {
-  document.body.classList.toggle('bg-dark');
-  document.body.classList.toggle('text-light');
-  document.querySelectorAll('.card').forEach(card => card.classList.toggle('bg-secondary'));
-}
-</script>
 
+  <!-- Modo escuro -->
+  <div class="form-check form-switch text-end me-3 mt-2">
+    <input class="form-check-input" type="checkbox" id="modoEscuroToggle" onchange="alternarModoEscuro()">
+    <label class="form-check-label" for="modoEscuroToggle">Modo escuro</label>
+  </div>
+  <script>
+    function alternarModoEscuro() {
+      document.body.classList.toggle('bg-dark');
+      document.body.classList.toggle('text-light');
+      document.querySelectorAll('.card').forEach(card => card.classList.toggle('bg-secondary'));
+    }
+  </script>
 
-  
-<div class="container">
-  <div id="produtos" class="row mb-4"></div>
+  <div class="container mt-4">
 
-    <!-- Filtros de busca -->
+    <!-- Filtros -->
     <div class="row mb-4">
       <div class="col-md-4">
         <input type="text" id="busca" class="form-control" placeholder="Buscar por nome">
@@ -59,14 +56,16 @@ function alternarModoEscuro() {
       </div>
     </div>
 
-    <div class="row" id="produtos"></div>
+    <!-- Produtos -->
+    <div class="row mb-5" id="produtos"></div>
 
+    <!-- Carrinho -->
     <h2 class="mt-5">🛒 Meu Carrinho</h2>
     <ul id="carrinho" class="list-group mb-3"></ul>
-    <button class="btn btn-success" onclick="finalizarCompra()">Finalizar Compra</button>
+    <button class="btn btn-success mb-5" onclick="finalizarCompra()">Finalizar Compra</button>
   </div>
 
-  <!-- Modal de login -->
+  <!-- Modal de login/cadastro -->
   <div class="modal fade" id="loginModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -78,7 +77,6 @@ function alternarModoEscuro() {
           <input type="email" id="email" class="form-control mb-2" placeholder="Email">
           <input type="password" id="senha" class="form-control mb-3" placeholder="Senha">
           <button class="btn btn-primary w-100 mb-2" onclick="login()">Entrar</button>
-
           <hr>
           <input type="email" id="emailCadastro" class="form-control mb-2" placeholder="Novo Email">
           <input type="password" id="senhaCadastro" class="form-control mb-2" placeholder="Nova Senha">
@@ -88,21 +86,21 @@ function alternarModoEscuro() {
     </div>
   </div>
 
+  <!-- Scripts finais -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      carregarProdutos();
+    });
+  </script>
 
-<footer class="bg-dark text-light py-4 mt-5">
-  <div class="container text-center">
-    <p class="mb-1">© 2025 Loja Online - Todos os direitos reservados.</p>
-    <p class="mb-0"><small>Desenvolvido com ♥ usando Firebase & Bootstrap</small></p>
-  </div>
-</footer>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  carregarProdutos();
-});
-</script>
+  <!-- Rodapé -->
+  <footer class="bg-dark text-light py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-1">© 2025 Loja Online - Todos os direitos reservados.</p>
+      <p class="mb-0"><small>Desenvolvido com ♥ usando Firebase & Bootstrap</small></p>
+    </div>
+  </footer>
 
 </body>
 </html>
