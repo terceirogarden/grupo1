@@ -14,7 +14,9 @@
 <body class="bg-light">
   <div class="container mt-4">
     <h2>Painel Administrativo</h2>
+    <div id="mensagem" class="alert alert-info d-none"></div>
     <button class="btn btn-primary my-3" onclick="mostrarFormulario()">Adicionar Produto</button>
+    <button class="btn btn-secondary my-3" onclick="forcarProdutoExemplo()">+ Produto Exemplo</button>
     <div id="form-produto" class="mb-4 d-none">
       <input type="text" id="nome" class="form-control mb-2" placeholder="Nome do produto">
       <input type="number" id="preco" class="form-control mb-2" placeholder="Preço">

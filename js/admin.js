@@ -35,6 +35,9 @@ function carregarProdutos() {
       `;
     });
     document.getElementById("lista-produtos").innerHTML = html;
+    if (!snapshot.empty) {
+      mostrarMensagem("Produtos carregados com sucesso.", "info");
+    }
   });
 }
 
@@ -62,11 +65,13 @@ function salvarProduto() {
 
   if (id) {
     db.collection("produtos").doc(id).update(dados).then(() => {
+      mostrarMensagem("Produto atualizado com sucesso!", "success");
       cancelarFormulario();
       carregarProdutos();
     });
   } else {
     db.collection("produtos").add(dados).then(() => {
+      mostrarMensagem("Produto adicionado com sucesso!", "success");
       cancelarFormulario();
       carregarProdutos();
     });
@@ -84,6 +89,29 @@ function editarProduto(id, nome, preco, estoque, imagem) {
 
 function excluirProduto(id) {
   if (confirm("Deseja excluir este produto?")) {
-    db.collection("produtos").doc(id).delete().then(() => carregarProdutos());
+    db.collection("produtos").doc(id).delete().then(() => {
+      mostrarMensagem("Produto excluído com sucesso!", "danger");
+      carregarProdutos();
+    });
   }
+}
+
+function mostrarMensagem(texto, tipo) {
+  const el = document.getElementById("mensagem");
+  el.className = "alert alert-" + tipo;
+  el.textContent = texto;
+  el.classList.remove("d-none");
+  setTimeout(() => el.classList.add("d-none"), 3000);
+}
+
+function forcarProdutoExemplo() {
+  db.collection("produtos").add({
+    nome: "Produto Exemplo",
+    preco: 99.9,
+    estoque: 10,
+    imagem: "https://via.placeholder.com/300"
+  }).then(() => {
+    mostrarMensagem("Produto de exemplo adicionado!", "primary");
+    carregarProdutos();
+  });
 }
