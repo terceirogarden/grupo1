@@ -126,8 +126,8 @@ function carregarUsuarios() {
     let html = "";
     snapshot.forEach(doc => {
       const u = doc.data();
+      const email = u.email || "Email não disponível";
       const isAdmin = u.perfil === "admin";
-      const email = u.email || "Email não informado";
       html += `
         <li class="list-group-item d-flex justify-content-between align-items-center">
           ${email}

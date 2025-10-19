@@ -23,6 +23,18 @@
       </div>
     </div>
   </nav>
+<div class="form-check form-switch text-end me-3 mt-2">
+  <input class="form-check-input" type="checkbox" id="modoEscuroToggle" onchange="alternarModoEscuro()">
+  <label class="form-check-label text-light" for="modoEscuroToggle">Modo escuro</label>
+</div>
+<script>
+function alternarModoEscuro() {
+  document.body.classList.toggle('bg-dark');
+  document.body.classList.toggle('text-light');
+  document.querySelectorAll('.card').forEach(card => card.classList.toggle('bg-secondary'));
+}
+</script>
+
 
   <div class="container">
     <!-- Filtros de busca -->
@@ -71,5 +83,13 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<footer class="bg-dark text-light py-4 mt-5">
+  <div class="container text-center">
+    <p class="mb-1">© 2025 Loja Online - Todos os direitos reservados.</p>
+    <p class="mb-0"><small>Desenvolvido com ♥ usando Firebase & Bootstrap</small></p>
+  </div>
+</footer>
+
 </body>
 </html>

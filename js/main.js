@@ -23,7 +23,7 @@ function cadastrar() {
   auth.createUserWithEmailAndPassword(email, senha)
     .then(cred => {
       return db.collection("usuarios").doc(cred.user.uid).set({
-        email: cred.user.email,
+        email: email,
         perfil: "cliente"
       });
     })
@@ -34,6 +34,18 @@ function cadastrar() {
     .catch(error => {
       alert("Erro ao cadastrar: " + error.message);
     });
+}
+
+    const email = document.getElementById("emailCadastro").value;
+    const senha = document.getElementById("senhaCadastro").value;
+    auth.createUserWithEmailAndPassword(email, senha)
+        .then(() => {
+            const uid = auth.currentUser.uid;
+            db.collection("usuarios").doc(uid).set({ perfil: "cliente" });
+            alert("Usuário criado!");
+            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+        })
+        .catch(err => alert("Erro ao cadastrar: " + err.message));
 }
 
 function logout() {
