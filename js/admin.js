@@ -129,7 +129,7 @@ function carregarUsuarios() {
       const isAdmin = u.perfil === "admin";
       html += `
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          ${u.email}
+          ${u.email || 'Sem email'}
           ${isAdmin ? '<span class="badge bg-success">Admin</span>' :
           `<button class="btn btn-sm btn-outline-success" onclick="promover('${doc.id}')">Tornar Admin</button>`}
         </li>
