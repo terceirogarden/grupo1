@@ -14,7 +14,10 @@
 <body class="bg-light">
 
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
-    <div class="container">
+    
+<div class="container">
+  <div id="produtos" class="row mb-4"></div>
+
       <a class="navbar-brand" href="#">🛍️ Loja Online</a>
       <div>
         <button class="btn btn-outline-secondary me-2 d-none" id="btn-admin" onclick="window.location.href='admin.html'">Admin</button>
@@ -36,7 +39,10 @@ function alternarModoEscuro() {
 </script>
 
 
-  <div class="container">
+  
+<div class="container">
+  <div id="produtos" class="row mb-4"></div>
+
     <!-- Filtros de busca -->
     <div class="row mb-4">
       <div class="col-md-4">
@@ -90,6 +96,13 @@ function alternarModoEscuro() {
     <p class="mb-0"><small>Desenvolvido com ♥ usando Firebase & Bootstrap</small></p>
   </div>
 </footer>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  carregarProdutos();
+});
+</script>
 
 </body>
 </html>
