@@ -2,10 +2,18 @@
 let usuarioAtual = null;
 let carrinho = [];
 
+function abrirLogin() {
+    const modal = new bootstrap.Modal(document.getElementById('loginModal'));
+    modal.show();
+}
+
 function login() {
     const email = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
     auth.signInWithEmailAndPassword(email, senha)
+        .then(() => {
+            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+        })
         .catch(err => alert("Erro ao logar: " + err.message));
 }
 
@@ -16,18 +24,21 @@ function cadastrar() {
         .then(() => {
             const uid = auth.currentUser.uid;
             db.collection("usuarios").doc(uid).set({ perfil: "cliente" });
-            alert("Usuário criado com sucesso!");
+            alert("Usuário criado!");
+            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
         })
         .catch(err => alert("Erro ao cadastrar: " + err.message));
 }
 
 function logout() {
-    auth.signOut().then(() => {
-        alert("Deslogado");
-    });
+    auth.signOut();
 }
 
 function adicionarAoCarrinho(produto) {
+    if (!usuarioAtual) {
+        abrirLogin();
+        return;
+    }
     carrinho.push(produto);
     renderizarCarrinho();
 }
@@ -35,7 +46,7 @@ function adicionarAoCarrinho(produto) {
 function renderizarCarrinho() {
     const ul = document.getElementById("carrinho");
     ul.innerHTML = "";
-    carrinho.forEach((p, i) => {
+    carrinho.forEach(p => {
         const li = document.createElement("li");
         li.className = "list-group-item";
         li.textContent = `${p.nome} - R$ ${p.preco.toFixed(2)}`;
@@ -44,6 +55,7 @@ function renderizarCarrinho() {
 }
 
 function finalizarCompra() {
+    if (!usuarioAtual) return abrirLogin();
     if (carrinho.length === 0) return alert("Carrinho vazio.");
     db.collection("compras").add({
         uid: usuarioAtual.uid,
@@ -64,12 +76,12 @@ function carregarProdutos() {
             html += `
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
-                        <img src="${produto.imagem || 'https://via.placeholder.com/150'}" class="card-img-top" alt="${produto.nome}">
+                        <img src="${produto.imagem || 'https://via.placeholder.com/150'}" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">${produto.nome}</h5>
                             <p class="card-text">Preço: R$ ${produto.preco.toFixed(2)}</p>
                             <p class="card-text">Estoque: ${produto.estoque}</p>
-                            <button class="btn btn-primary" onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Comprar</button>
+                            <button class="btn btn-primary w-100" onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Comprar</button>
                         </div>
                     </div>
                 </div>
@@ -80,13 +92,9 @@ function carregarProdutos() {
 }
 
 auth.onAuthStateChanged(user => {
-    if (user) {
-        usuarioAtual = user;
-        document.getElementById("areaLogin").style.display = "none";
-        document.getElementById("loja").style.display = "block";
-        carregarProdutos();
-    } else {
-        document.getElementById("areaLogin").style.display = "block";
-        document.getElementById("loja").style.display = "none";
-    }
+    usuarioAtual = user;
+    document.getElementById("btn-login").classList.toggle("d-none", !!user);
+    document.getElementById("btn-logout").classList.toggle("d-none", !user);
 });
+
+carregarProdutos();
