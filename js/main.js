@@ -42,3 +42,14 @@ auth.onAuthStateChanged(user => {
         carregarProdutos();
     }
 });
+
+auth.onAuthStateChanged(user => {
+    if (user) {
+        document.getElementById("loja").style.display = "block";
+        document.getElementById("areaLogin").style.display = "none";
+        carregarProdutos();
+    } else {
+        document.getElementById("loja").style.display = "none";
+        document.getElementById("areaLogin").style.display = "block";
+    }
+});
