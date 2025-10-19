@@ -1,108 +1,100 @@
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Loja Online - v9.3.1</title>
+  <title>Loja Online</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js"></script>
-  <script src="js/main.js" defer></script>
 </head>
 <body class="bg-light">
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
-    
-<div class="container">
-  <div id="produtos" class="row mb-4"></div>
-
-      <a class="navbar-brand" href="#">🛍️ Loja Online</a>
-      <div>
-        <button class="btn btn-outline-secondary me-2 d-none" id="btn-admin" onclick="window.location.href='admin.html'">Admin</button>
-        <button class="btn btn-outline-primary me-2" id="btn-login" onclick="abrirLogin()">Entrar</button>
-        <button class="btn btn-outline-secondary d-none" id="btn-logout" onclick="logout()">Sair</button>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Minha Loja</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <button class="btn btn-outline-light me-2" id="btn-login" onclick="abrirLogin()">Entrar</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-warning me-2 d-none" id="btn-admin" onclick="window.location.href='admin.html'">Admin</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-light d-none" id="btn-logout" onclick="logout()">Sair</button>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
-<div class="form-check form-switch text-end me-3 mt-2">
-  <input class="form-check-input" type="checkbox" id="modoEscuroToggle" onchange="alternarModoEscuro()">
-  <label class="form-check-label text-light" for="modoEscuroToggle">Modo escuro</label>
-</div>
-<script>
-function alternarModoEscuro() {
-  document.body.classList.toggle('bg-dark');
-  document.body.classList.toggle('text-light');
-  document.querySelectorAll('.card').forEach(card => card.classList.toggle('bg-secondary'));
-}
-</script>
 
-
-  
-<div class="container">
-  <div id="produtos" class="row mb-4"></div>
-
-    <!-- Filtros de busca -->
-    <div class="row mb-4">
+  <!-- Filtros -->
+  <div class="container mt-4">
+    <div class="row g-2 align-items-end">
       <div class="col-md-4">
-        <input type="text" id="busca" class="form-control" placeholder="Buscar por nome">
+        <label class="form-label">Buscar produto</label>
+        <input type="text" class="form-control" id="busca" oninput="aplicarFiltros()">
       </div>
       <div class="col-md-3">
-        <input type="number" id="precoMin" class="form-control" placeholder="Preço mínimo">
+        <label class="form-label">Preço mínimo</label>
+        <input type="number" class="form-control" id="precoMin" oninput="aplicarFiltros()">
       </div>
       <div class="col-md-3">
-        <input type="number" id="precoMax" class="form-control" placeholder="Preço máximo">
-      </div>
-      <div class="col-md-2">
-        <button class="btn btn-primary w-100" onclick="aplicarFiltros()">Filtrar</button>
+        <label class="form-label">Preço máximo</label>
+        <input type="number" class="form-control" id="precoMax" oninput="aplicarFiltros()">
       </div>
     </div>
+  </div>
 
-    <div class="row" id="produtos"></div>
+  <!-- Produtos -->
+  <div class="container my-4">
+    <div id="produtos" class="row"></div>
+  </div>
 
-    <h2 class="mt-5">🛒 Meu Carrinho</h2>
+  <!-- Carrinho -->
+  <div class="container mb-5">
+    <h4>Carrinho de Compras</h4>
     <ul id="carrinho" class="list-group mb-3"></ul>
     <button class="btn btn-success" onclick="finalizarCompra()">Finalizar Compra</button>
   </div>
 
-  <!-- Modal de login -->
+  <!-- Rodapé -->
+  <footer class="bg-dark text-light text-center py-3 mt-auto">
+    <div class="container">
+      <small>&copy; 2025 Minha Loja Online. Todos os direitos reservados.</small>
+    </div>
+  </footer>
+
+  <!-- Modais de login/cadastro -->
   <div class="modal fade" id="loginModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Acesso ao Sistema</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
+        <div class="modal-header"><h5 class="modal-title">Entrar</h5></div>
         <div class="modal-body">
-          <input type="email" id="email" class="form-control mb-2" placeholder="Email">
-          <input type="password" id="senha" class="form-control mb-3" placeholder="Senha">
-          <button class="btn btn-primary w-100 mb-2" onclick="login()">Entrar</button>
-
+          <input type="email" class="form-control mb-2" id="email" placeholder="Email">
+          <input type="password" class="form-control mb-2" id="senha" placeholder="Senha">
+          <button class="btn btn-primary w-100 mb-2" onclick="login()">Login</button>
           <hr>
-          <input type="email" id="emailCadastro" class="form-control mb-2" placeholder="Novo Email">
-          <input type="password" id="senhaCadastro" class="form-control mb-2" placeholder="Nova Senha">
-          <button class="btn btn-success w-100" onclick="cadastrar()">Cadastrar</button>
+          <h6 class="mt-3">Cadastrar-se</h6>
+          <input type="email" class="form-control mb-2" id="emailCadastro" placeholder="Email">
+          <input type="password" class="form-control mb-2" id="senhaCadastro" placeholder="Senha">
+          <button class="btn btn-outline-primary w-100" onclick="cadastrar()">Cadastrar</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<footer class="bg-dark text-light py-4 mt-5">
-  <div class="container text-center">
-    <p class="mb-1">© 2025 Loja Online - Todos os direitos reservados.</p>
-    <p class="mb-0"><small>Desenvolvido com ♥ usando Firebase & Bootstrap</small></p>
-  </div>
-</footer>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  carregarProdutos();
-});
-</script>
-
+  <script src="js/firebase-config.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
