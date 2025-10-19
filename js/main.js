@@ -7,14 +7,11 @@ function abrirLogin() {
     modal.show();
 }
 
-
 function login() {
     const email = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
     auth.signInWithEmailAndPassword(email, senha)
-        .then(() => {
-            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
-        })
+        .then(() => bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide())
         .catch(err => alert("Erro ao logar: " + err.message));
 }
 
@@ -63,7 +60,7 @@ function finalizarCompra() {
         itens: carrinho,
         data: new Date()
     }).then(() => {
-        alert("Compra finalizada!");
+        alert("Compra registrada!");
         carrinho = [];
         renderizarCarrinho();
     });
@@ -73,22 +70,25 @@ function carregarProdutos() {
     db.collection("produtos").get().then(snapshot => {
         let html = "";
         snapshot.forEach(doc => {
-            const produto = doc.data();
+            const p = doc.data();
             html += `
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
-                        <img src="${produto.imagem || 'https://via.placeholder.com/150'}" class="card-img-top">
+                        <img src="${p.imagem || 'https://via.placeholder.com/300x200'}" class="card-img-top">
                         <div class="card-body">
-                            <h5 class="card-title">${produto.nome}</h5>
-                            <p class="card-text">Preço: R$ ${produto.preco.toFixed(2)}</p>
-                            <p class="card-text">Estoque: ${produto.estoque}</p>
-                            <button class="btn btn-primary w-100" onclick='adicionarAoCarrinho(${JSON.stringify(produto)})'>Comprar</button>
+                            <h5 class="card-title">${p.nome}</h5>
+                            <p class="card-text">Preço: R$ ${p.preco.toFixed(2)}</p>
+                            <p class="card-text">Estoque: ${p.estoque}</p>
+                            <button class="btn btn-primary w-100" onclick='adicionarAoCarrinho(${JSON.stringify(p)})'>Comprar</button>
                         </div>
                     </div>
                 </div>
             `;
         });
         document.getElementById("produtos").innerHTML = html;
+    }).catch(err => {
+        document.getElementById("produtos").innerHTML = "<p class='text-danger'>Erro ao carregar produtos.</p>";
+        console.error(err);
     });
 }
 
