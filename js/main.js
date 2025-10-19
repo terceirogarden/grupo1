@@ -115,3 +115,54 @@ auth.onAuthStateChanged(user => {
 });
 
 carregarProdutos();
+
+let produtosOriginais = [];
+
+function aplicarFiltros() {
+  const busca = document.getElementById("busca").value.toLowerCase();
+  const precoMin = parseFloat(document.getElementById("precoMin").value);
+  const precoMax = parseFloat(document.getElementById("precoMax").value);
+
+  let filtrados = produtosOriginais.filter(p => {
+    const nomeOk = p.nome.toLowerCase().includes(busca);
+    const precoOk = (!precoMin || p.preco >= precoMin) && (!precoMax || p.preco <= precoMax);
+    return nomeOk && precoOk;
+  });
+
+  renderizarProdutos(filtrados);
+}
+
+function renderizarProdutos(lista) {
+  const container = document.getElementById("produtos");
+  let html = "";
+  lista.forEach(p => {
+    html += `
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img src="${p.imagem || 'https://via.placeholder.com/300x200'}" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">${p.nome}</h5>
+            <p class="card-text">Preço: R$ ${p.preco.toFixed(2)}</p>
+            <p class="card-text">Estoque: ${p.estoque}</p>
+            <button class="btn btn-primary w-100" onclick='adicionarAoCarrinho(${JSON.stringify(p)})'>Comprar</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+// Atualizar carregarProdutos para salvar produtosOriginais
+function carregarProdutos() {
+    db.collection("produtos").get().then(snapshot => {
+        produtosOriginais = [];
+        snapshot.forEach(doc => {
+            produtosOriginais.push(doc.data());
+        });
+        renderizarProdutos(produtosOriginais);
+    }).catch(err => {
+        document.getElementById("produtos").innerHTML = "<p class='text-danger'>Erro ao carregar produtos.</p>";
+        console.error(err);
+    });
+}
