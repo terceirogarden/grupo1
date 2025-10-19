@@ -11,20 +11,22 @@
     <script src="js/main.js" defer></script>
 </head>
 <body>
-    <h1>Loja Online</h1>
-    <div id="produtos"></div>
+    <div id="areaLogin">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="senha" placeholder="Senha">
+        <button onclick="login()">Entrar</button>
 
-    <hr>
-    <h2>Login</h2>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="senha" placeholder="Senha">
-    <button onclick="login()">Entrar</button>
+        <h2>Cadastro</h2>
+        <input type="email" id="emailCadastro" placeholder="Email">
+        <input type="password" id="senhaCadastro" placeholder="Senha">
+        <button onclick="cadastrar()">Cadastrar</button>
+    </div>
 
-    <h2>Cadastro</h2>
-    <input type="email" id="emailCadastro" placeholder="Email">
-    <input type="password" id="senhaCadastro" placeholder="Senha">
-    <button onclick="cadastrar()">Cadastrar</button>
-
-    <button onclick="logout()">Sair</button>
+    <div id="loja" style="display:none;">
+        <h1>Loja Online</h1>
+        <div id="produtos"></div>
+        <button onclick="logout()">Sair</button>
+    </div>
 </body>
 </html>

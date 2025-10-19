@@ -3,20 +3,22 @@ function login() {
     const email = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
     auth.signInWithEmailAndPassword(email, senha)
-        .then(user => alert("Login realizado"))
-        .catch(err => alert(err.message));
+        .then(() => {})
+        .catch(err => alert("Erro ao logar: " + err.message));
 }
 
 function cadastrar() {
     const email = document.getElementById("emailCadastro").value;
     const senha = document.getElementById("senhaCadastro").value;
     auth.createUserWithEmailAndPassword(email, senha)
-        .then(user => alert("Usuário criado"))
-        .catch(err => alert(err.message));
+        .then(() => alert("Usuário criado com sucesso!"))
+        .catch(err => alert("Erro ao cadastrar: " + err.message));
 }
 
 function logout() {
-    auth.signOut().then(() => alert("Deslogado"));
+    auth.signOut().then(() => {
+        alert("Usuário deslogado");
+    });
 }
 
 function carregarProdutos() {
@@ -39,17 +41,11 @@ function carregarProdutos() {
 
 auth.onAuthStateChanged(user => {
     if (user) {
-        carregarProdutos();
-    }
-});
-
-auth.onAuthStateChanged(user => {
-    if (user) {
-        document.getElementById("loja").style.display = "block";
         document.getElementById("areaLogin").style.display = "none";
+        document.getElementById("loja").style.display = "block";
         carregarProdutos();
     } else {
-        document.getElementById("loja").style.display = "none";
         document.getElementById("areaLogin").style.display = "block";
+        document.getElementById("loja").style.display = "none";
     }
 });
