@@ -127,9 +127,10 @@ function carregarUsuarios() {
     snapshot.forEach(doc => {
       const u = doc.data();
       const isAdmin = u.perfil === "admin";
+      const email = u.email || "Email não informado";
       html += `
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          ${u.email || 'Sem email'}
+          ${email}
           ${isAdmin ? '<span class="badge bg-success">Admin</span>' :
           `<button class="btn btn-sm btn-outline-success" onclick="promover('${doc.id}')">Tornar Admin</button>`}
         </li>
