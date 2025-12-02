@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bem-vindo à Sorveteria Fica Frio Ae</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #e3f2fd 0%, #fce4ec 100%);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Arial', sans-serif;
+      color: #424242;
+      margin: 0;
+      overflow: hidden;
+    }
+    .welcome-container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1rem;
+      border-radius: 15px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      max-width: 400px;
+      animation: fadeIn 1.5s ease-in-out;
+      border: 2px solid #ddd;
+      position: relative;
+    }
+    .welcome-container::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
+      border-radius: 20px;
+      z-index: -1;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 0.5rem;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border: 3px solid #fff;
+    }
+    h1 {
+      color: #1976d2;
+      font-weight: bold;
+      font-size: 1.8rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 10px rgba(25, 118, 210, 0.5);
+      margin-bottom: 1rem;
+    }
+    .story {
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      color: #616161;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .tagline {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #ad1457;
+      margin-bottom: 1.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px rgba(173, 20, 87, 0.5);
+      font-style: italic;
+    }
+    .btn-enter {
+      background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+      border: none;
+      color: #1976d2;
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .btn-enter:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      background: linear-gradient(45deg, #bbdefb, #90caf9);
+    }
+    .footer-text {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: #9e9e9e;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-container">
+    <img src="https://i.postimg.cc/wTFHMf2z/logo3.jpg" alt="Logo Sorveteria Fica Frio Ae" class="logo">
+    <h1>Bem-vindo à Sorveteria Fica Frio Ae</h1>
+    <div class="story">
+      <p>Fundada em 2020, a Sorveteria Fica Frio Ae nasceu da paixão por criar momentos de alegria e frescor em dias quentes. Utilizando ingredientes naturais e receitas artesanais, nossa missão é levar sorrisos e delícias geladas para famílias e amigos. Cada sorvete é preparado com amor, garantindo qualidade e sabor incomparáveis. Venha nos visitar e sinta o frio bom que aquece o coração!</p>
+    </div>
+    <div class="tagline">
+      "Refresque sua vida com o melhor sorvete artesanal – Fica Frio Ae, onde cada colherada é uma aventura gelada!"
+    </div>
+    <button class="btn-enter" onclick="window.location.href='index.html'">Entrar na Sorveteria</button>
+    <div class="footer-text">
+      © 2023 Sorveteria Fica Frio Ae. Todos os direitos reservados.
+    </div>
+  </div>
+</body>
+</html>

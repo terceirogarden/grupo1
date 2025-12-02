@@ -57,8 +57,6 @@ function mostrarFormulario() {
   document.getElementById("preco").value = "";
   document.getElementById("estoque").value = "";
   document.getElementById("imagemURL").value = "";
-  document.getElementById("imagemArquivo").value = "";
-  document.getElementById("tipoImagem").value = "url";
   alternarEntradaImagem();
 }
 

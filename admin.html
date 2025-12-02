@@ -2,49 +2,193 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Painel Admin</title>
+  <title>Painel Admin – Neon Pastel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <script src="js/firebase-config.js"></script>
   <script src="js/admin.js" defer></script>
+
+  <!-- ESTILO NEON PASTEL -->
+  <style>
+    body {
+      background: linear-gradient(135deg, #d6eaff, #ffe6ff);
+      min-height: 100vh;
+      padding-bottom: 100px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .navbar-brand {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #000000 !important;
+      text-shadow: 0 0 10px #000000;
+    }
+
+    /* BOTÕES */
+    .btn-neon {
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #ff9bff, #8fd6ff);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 0 12px #ffaaff;
+      transition: 0.2s;
+    }
+    .btn-neon:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 16px #ff77ff;
+    }
+
+    /* FORM CARD */
+    .card {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 12px #c9bfff;
+    }
+
+    /* INPUTS */
+    .form-control, .form-select {
+      border-radius: 12px;
+      border: 2px solid #c19bff;
+      background: rgba(255, 255, 255, .7);
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: #8e44ff;
+      box-shadow: 0 0 12px #dcb8ff;
+    }
+
+    /* PRODUTO CARD */
+    .neon-card {
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 16px;
+      padding: 15px;
+      border: 2px solid rgba(255, 200, 255, 0.6);
+      box-shadow: 0 0 15px rgba(255, 140, 255, 0.5);
+      transition: 0.2s;
+    }
+    .neon-card:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 25px rgba(255, 150, 255, 0.8);
+    }
+
+    /* TITULOS */
+    h2, h3 {
+      color: #7a00ff;
+      text-shadow: 0 0 12px #d8b5ff;
+      font-weight: 700;
+    }
+
+    footer {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+    }
+  </style>
 </head>
-<body class="bg-light">
-  <div class="container mt-4">
-    <h2>Painel Administrativo</h2>
-    <div id="mensagem" class="alert alert-info d-none"></div>
-    <button class="btn btn-primary my-3" onclick="mostrarFormulario()">Adicionar Produto</button>
-    <div id="form-produto" class="mb-4 d-none">
-      <input type="text" id="nome" class="form-control mb-2" placeholder="Nome do produto">
-      <input type="number" id="preco" class="form-control mb-2" placeholder="Preço">
-      <input type="number" id="estoque" class="form-control mb-2" placeholder="Estoque">
+<body>
 
-      <select id="tipoImagem" class="form-select mb-2" onchange="alternarEntradaImagem()">
-        <option value="url">Imagem por link (URL)</option>
-        <option value="arquivo">Imagem do computador</option>
-      </select>
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg px-4 py-3">
+    <a class="navbar-brand" href="index.html">
+      <img src="https://i.postimg.cc/wTFHMf2z/logo3.jpg" alt="Logo Sorveteria Fica Frio Ae" width="50" height="50" class="d-inline-block align-text-top me-2">
+      <strong style="color: red; font-size: 1.5em;">Sorveteria Fica Frio Ae</strong>
+    </a>
+    <div class="ms-auto">
+      <button class="btn btn-danger" onclick="logout()">Sair</button>
+    </div>
+  </nav>
 
-      <input type="text" id="imagemURL" class="form-control mb-2" placeholder="Cole o link da imagem">
-      <input type="file" id="imagemArquivo" class="form-control mb-2 d-none">
+  <div class="container mt-5">
+
+    <!-- TÍTULO -->
+    <h2 class="text-center mb-4">Gerenciamento de Produtos</h2>
+
+    <div class="d-flex justify-content-center mb-4">
+      <button class="btn-neon" onclick="mostrarFormulario()">➕ Adicionar Produto</button>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div id="form-produto" class="card d-none">
+      <h4 class="mb-3">Novo Produto</h4>
 
       <input type="hidden" id="id-produto">
-      <button class="btn btn-success" onclick="salvarProduto()">Salvar</button>
-      <button class="btn btn-secondary" onclick="cancelarFormulario()">Cancelar</button>
-    </div>
-    <div id="lista-produtos" class="row"></div>
 
-    <h3 class="mt-5">Gerenciar Usuários</h3>
-    <ul id="lista-usuarios" class="list-group mb-5"></ul>
+      <div class="mb-3">
+        <input type="text" id="nome" class="form-control" placeholder="Nome do produto">
+      </div>
+
+      <div class="mb-3">
+        <input type="number" id="preco" class="form-control" placeholder="Preço">
+      </div>
+
+      <div class="mb-3">
+        <input type="number" id="estoque" class="form-control" placeholder="Estoque">
+      </div>
+
+      <div class="mb-3">
+        <select id="tipoImagem" class="form-select" onchange="alternarEntradaImagem()">
+          <option value="url">Imagem por URL</option>
+          <option value="arquivo">Enviar arquivo</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <input type="text" id="imagemURL" class="form-control" placeholder="URL da imagem">
+        <input type="file" id="imagemArquivo" class="form-control d-none">
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button class="btn-neon me-2" onclick="salvarProduto()">Salvar</button>
+        <button class="btn btn-secondary" onclick="cancelarFormulario()">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- LISTA DE PRODUTOS -->
+    <h3 class="mt-5 mb-3">Produtos Cadastrados</h3>
+    <div id="lista-produtos" class="row g-4"></div>
+
+    <!-- USUÁRIOS -->
+    <h3 class="mt-5 mb-3">Usuários Registrados</h3>
+    <div class="card">
+      <ul id="lista-usuarios" class="list-group list-group-flush"></ul>
+    </div>
+
+    <!-- DASHBOARD -->
+    <h3 class="mt-5 mb-3">Dashboard</h3>
+    <div class="card p-3">
+      <canvas id="graficoProdutos"></canvas>
+    </div>
+
   </div>
 
+  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <footer class="bg-dark text-light py-4 mt-5">
-    <div class="container text-center">
-      <p class="mb-1">© 2025 Loja Online - Todos os direitos reservados.</p>
-      <p class="mb-0"><small>Desenvolvido com ♥ usando Firebase & Bootstrap</small></p>
-    </div>
+
+  <footer class="text-center py-3 mt-5">
+    Painel Admin – 2025
   </footer>
+
 </body>
 </html>
